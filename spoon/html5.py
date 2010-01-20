@@ -1,6 +1,13 @@
+"""
+HTML5 parsing.
+"""
+
 import html5lib
 
 def article(pathname):
+    """
+    Find the top-most <article> in the HTML5 document at pathname.
+    """
     return _article(html5lib.parse(open(pathname)))
 def _article(node):
     if 0 == len(node.childNodes):
@@ -14,10 +21,15 @@ def _article(node):
             return out
 
 def article_title(article):
+    """
+    Return the title of the HTML5 <article>.  This is the contents of the
+    <h1> and all its children with tags stripped.  If necessary, this will
+    traverse <hgroup> and <header> tags.
+    """
     for n in article.childNodes:
         if "h1" == n.name:
             return _article_title(n)
-        elif "hgroup" == n.name or "heading" == n.name:
+        elif "hgroup" == n.name or "header" == n.name:
             return article_title(n)
     return None
 def _article_title(node):

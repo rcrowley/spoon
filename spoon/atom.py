@@ -1,3 +1,7 @@
+"""
+An Atom feed.
+"""
+
 from xml.etree import ElementTree
 from datetime import datetime
 
@@ -6,14 +10,23 @@ NS = "http://www.w3.org/2005/Atom"
 ElementTree._namespace_map[NS] = "atom"
 
 def qname(name):
+    """
+    Return a node name qualified with the Atom namespace.
+    """
     return unicode(ElementTree.QName(NS, name))
 
 class Atom(object):
+    """
+    An Atom feed.
+    """
 
     # The maximum number of <entry> nodes.
     ENTRIES = 15
 
     def __init__(self, pathname, title, alternate, id, author):
+        """
+        Setup to manage an Atom feed.
+        """
         self.pathname = pathname
         self.title = title
         self.alternate = alternate
@@ -40,6 +53,9 @@ class Atom(object):
             self.etree = ElementTree.parse(self.pathname)
 
     def __del__(self):
+        """
+        Write the Atom feed back to disk with an updated timestamp.
+        """
         self.etree.find(qname("updated")).text = datetime.today().isoformat()
         self.etree.write(self.pathname)
 
@@ -50,6 +66,13 @@ class Atom(object):
         author=None,
         content=""
     ):
+        """
+        Create a new <entry>, bumping an old one out of the Atom feed if
+        necessary.  Fill the new <entry> with the parameters or sensible
+        defaults.
+        """
+
+        # Find sensible defaults for omitted arguments.
         if title is None:
             title = self.title
         if alternate is None:

@@ -1,3 +1,7 @@
+"""
+Spoon feeds HTML5.
+"""
+
 from spoon import atom, html5
 from xml.etree import ElementTree
 import os
@@ -14,6 +18,12 @@ class Spoon(object):
         author=None,
         url=None
     ):
+        """
+        Setup to manage a static site and Atom feed.  Sensible defaults will
+        be found as necessary.
+        """
+
+        # Find sensible defaults for omitted arguments.
         if document_root is None:
             self.document_root = os.getcwd()
         else:
@@ -32,10 +42,12 @@ class Spoon(object):
             self.author = author
         if url is None:
             url = "http://{0}/{1}".format(self.server_name, "index.xml")
+
         try:
             os.mkdir(self.document_root)
         except OSError:
             pass
+
         self.atom = atom.Atom(
             pathname=os.path.join(self.document_root, "index.xml"),
             title=title,
@@ -45,9 +57,15 @@ class Spoon(object):
         )
 
     def pathname2url(self, pathname):
+        """
+        Get the web-accessible portion of pathname based on the document_root.
+        """
         return os.path.relpath(pathname, self.document_root)
 
     def publish(self, pathname):
+        """
+        Publish the HTML5 document at pathname in the Atom feed.
+        """
 
         article = html5.article(pathname)
         title = html5.article_title(article)
@@ -65,4 +83,8 @@ class Spoon(object):
         # TODO Manage links on index.html and archives.html.
 
     def republish(self, pathname):
-        pass
+        """
+        Republish the HTML5 document at pathname in the same <entry> in the
+        Atom feed.
+        """
+        pass # TODO
