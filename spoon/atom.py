@@ -10,35 +10,37 @@ def qname(name):
 
 class Atom(object):
 
-    # The filename of the spoon-fed feed.
-    FILENAME = "index.xml"
-
     # The maximum number of <entry> nodes.
     ENTRIES = 15
 
-    def __init__(self, pathname):
+    def __init__(self, pathname, title, alternate, id, author):
         self.pathname = pathname
+        self.title = title
+        self.alternate = alternate
+        self.author = author
         try:
             self.etree = ElementTree.parse(self.pathname)
         except IOError:
-            feed = ElementTree.Element("feed")
-            feed.set("xmlns", NS)
-            ElementTree.SubElement(feed, "title").text = "Crowley Code!"
-            ElementTree.SubElement(feed, "link",
-                href="http://rcrowley.org/feed", rel="self")
-            ElementTree.SubElement(feed, "link",
-                href="http://rcrowley.org/", rel="alternate")
-            ElementTree.SubElement(feed,
-                "id").text = "http://rcrowley.org/feed"
-            ElementTree.SubElement(feed, "updated")
+            feed = ElementTree.Element(qname("feed"))
+            ElementTree.SubElement(feed, qname("title")).text = self.title
+            ElementTree.SubElement(feed, qname("link"), {
+                qname("href"): id,
+                qname("rel"): "self"
+            })
+            ElementTree.SubElement(feed, qname("link"), {
+                qname("href"): alternate,
+                qname("rel"): "alternate"
+            })
+            ElementTree.SubElement(feed, "id").text = id
+            ElementTree.SubElement(feed, qname("updated"))
             ElementTree.SubElement(ElementTree.SubElement(feed,
-                "author"), "name").text = "Richard Crowley"
+                qname("author")), qname("name")).text = self.author
             self.etree = ElementTree.ElementTree(feed)
             self.etree.write(self.pathname)
             self.etree = ElementTree.parse(self.pathname)
 
     def __del__(self):
-        self.etree.find(qname("updated")).text = datetime.now().isoformat()
+        self.etree.find(qname("updated")).text = datetime.today().isoformat()
         self.etree.write(self.pathname)
 
     def entry(self,
@@ -46,8 +48,14 @@ class Atom(object):
         alternate=None,
         id=None,
         author=None,
-        content=None
+        content=""
     ):
+        if title is None:
+            title = self.title
+        if alternate is None:
+            alternate = self.alternate
+        if author is None:
+            author = self.author
 
         # Setup the new <entry>.
         entry = self.etree.find(qname("entry"))
@@ -66,16 +74,18 @@ class Atom(object):
                 qname("entry"))
 
         # Place the new article in the <entry>.
-        #   FIXME This will repeat the headline.
         ElementTree.SubElement(entry, qname("title")).text = title
-        ElementTree.SubElement(entry, qname("link"),
-            href=alternate, rel="alternate")
+        ElementTree.SubElement(entry, qname("link"), {
+            qname("href"): alternate,
+            qname("rel"): "alternate"
+        })
         ElementTree.SubElement(entry, qname("id")).text = id
         ElementTree.SubElement(entry, qname("published")).text \
-            = datetime.now().isoformat()
+            = datetime.today().isoformat()
         ElementTree.SubElement(entry, qname("updated")).text \
-            = datetime.now().isoformat()
+            = datetime.today().isoformat()
         ElementTree.SubElement(ElementTree.SubElement(entry,
             qname("author")), qname("name")).text = author
-        ElementTree.SubElement(entry, qname("content"),
-            type="html").text = content
+        ElementTree.SubElement(entry, qname("content"), {
+            qname("type"): "html"
+        }).text = content
