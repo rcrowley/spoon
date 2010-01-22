@@ -1,5 +1,5 @@
 """
-Spoon feeds HTML5.
+Spoon feeds HTML5 into Atom.
 """
 
 from spoon import atom, html5
@@ -8,7 +8,7 @@ import os
 
 class Spoon(object):
     """
-    Spoon feeds HTML5.
+    Spoon feeds HTML5 into Atom.
     """
 
     def __init__(self,
