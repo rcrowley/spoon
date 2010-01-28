@@ -58,7 +58,7 @@ class Atom(object):
         """
         Write the Atom feed back to disk with an updated timestamp.
         """
-        self.etree.find(qname("updated")).text
+        self.etree.find(qname("updated")).text \
             = datetime.today().strftime("%Y-%m-%dT%H:%M:%SZ")
         self.etree.write(self.pathname)
 
