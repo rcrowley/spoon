@@ -35,14 +35,16 @@ class Atom(object):
             self.etree = ElementTree.parse(self.pathname)
         except IOError:
             feed = ElementTree.Element(qname("feed"))
-            ElementTree.SubElement(feed, qname("title")).text = self.title
+            ElementTree.SubElement(feed, qname("title"), {
+                "type": "html"
+            }).text = self.title
             ElementTree.SubElement(feed, qname("link"), {
-                qname("href"): id,
-                qname("rel"): "self"
+                "href": id,
+                "rel": "self"
             })
             ElementTree.SubElement(feed, qname("link"), {
-                qname("href"): alternate,
-                qname("rel"): "alternate"
+                "href": alternate,
+                "rel": "alternate"
             })
             ElementTree.SubElement(feed, "id").text = id
             ElementTree.SubElement(feed, qname("updated"))
@@ -56,7 +58,8 @@ class Atom(object):
         """
         Write the Atom feed back to disk with an updated timestamp.
         """
-        self.etree.find(qname("updated")).text = datetime.today().isoformat()
+        self.etree.find(qname("updated")).text
+            = datetime.today().strftime("%Y-%m-%dT%H:%M:%SZ")
         self.etree.write(self.pathname)
 
     def entry(self,
@@ -97,18 +100,20 @@ class Atom(object):
                 qname("entry"))
 
         # Place the new article in the <entry>.
-        ElementTree.SubElement(entry, qname("title")).text = title
+        ElementTree.SubElement(entry, qname("title"), {
+            "type": "html"
+        }).text = title
         ElementTree.SubElement(entry, qname("link"), {
-            qname("href"): alternate,
-            qname("rel"): "alternate"
+            "href": alternate,
+            "rel": "alternate"
         })
         ElementTree.SubElement(entry, qname("id")).text = id
         ElementTree.SubElement(entry, qname("published")).text \
-            = datetime.today().isoformat()
+            = datetime.today().strftime("%Y-%m-%dT%H:%M:%SZ")
         ElementTree.SubElement(entry, qname("updated")).text \
-            = datetime.today().isoformat()
+            = datetime.today().strftime("%Y-%m-%dT%H:%M:%SZ")
         ElementTree.SubElement(ElementTree.SubElement(entry,
             qname("author")), qname("name")).text = author
         ElementTree.SubElement(entry, qname("content"), {
-            qname("type"): "html"
+            "type": "html"
         }).text = content
