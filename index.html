@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ron/v0.3'>
+  <title>spoon(7) -- Spoon feeds HTML5 into Atom</title>
+  <style type='text/css'>
+    body {margin:0}
+    #man, #man code, #man pre, #man tt, #man kbd, #man samp {
+      font-family:consolas,monospace;
+      font-size:16px;
+      line-height:1.3;
+      color:#343331;
+      background:#fff; }
+    #man { max-width:89ex; text-align:justify; margin:0 25px 25px 25px }
+    #man h1, #man h2, #man h3 { color:#232221;clear:left }
+    #man h1 { font-size:28px; margin:15px 0 30px 0; text-align:center }
+    #man h2 { font-size:18px; margin-bottom:0; margin-top:10px; line-height:1.3; }
+    #man h3 { font-size:16px; margin:0 0 0 4ex; }
+    #man p, #man ul, #man ol, #man dl, #man pre { margin:0 0 18px 0; }
+    #man pre {
+      color:#333231;
+      background:#edeceb;
+      padding:5px 7px;
+      margin:0px 0 20px 0;
+      border-left:2ex solid #ddd}
+    #man pre + h2, #man pre + h3 {
+      margin-top:22px;
+    }
+    #man h2 + pre, #man h3 + pre {
+      margin-top:5px;
+    }
+    #man > p, #man > ul, #man > ol, #man > dl, #man > pre { margin-left:8ex; }
+    #man dt { margin:0; clear:left }
+    #man dt.flush { float:left; width:8ex }
+    #man dd { margin:0 0 0 9ex }
+    #man code, #man strong, #man b { font-weight:bold; color:#131211; }
+    #man pre code { font-weight:normal; color:#232221; background:inherit }
+    #man em, var, u {
+      font-style:normal; color:#333231; border-bottom:1px solid #999; }
+    #man h1.man-title { display:none; }
+    #man ol.man, #man ol.man li { margin:2px 0 10px 0; padding:0;
+      float:left; width:33%; list-style-type:none;
+      text-transform:uppercase; font-size:18px; color:#999;
+      letter-spacing:1px;}
+    #man ol.man { width:100%; }
+    #man ol.man li.tl { text-align:left }
+    #man ol.man li.tc { text-align:center;letter-spacing:4px }
+    #man ol.man li.tr { text-align:right }
+    #man ol.man a { color:#999 }
+    #man ol.man a:hover { color:#333231 }
+  </style>
+</head>
+<body>
+<div id='man'>
+
+<h1 class='man-title'>spoon(7)</h1>
+
+<ol class='head man'>
+  <li class='tl'>spoon(7)</li>
+  <li class='tc'></li>
+  <li class='tr'>spoon(7)</li>
+</ol>
+
+<h2 id='NAME'>NAME</h2>
+<p><code>spoon</code> -- Spoon feeds HTML5 into Atom</p>
+<h2>SYNPOSIS</h2>
+
+<pre><code>import spoon
+s = spoon.Spoon(document_root, server_name, title, author)
+s.publish(pathname)
+</code></pre>
+
+<h2>DESCRIPTION</h2>
+
+<p>Spoon is a Python library for managing an Atom feed on a static Web site.  The feed is maintained at <code>{document_root}/index.xml</code>.  When publishing, the Atom feed adds a new <code>&lt;entry&gt;</code> node at the beginning and removes the last one if necessary to keep the total at 15.  The HTML5 document at <code>pathname</code> is parsed to find the outermost <code>&lt;article&gt;</code> node.  The title of that <code>&lt;article&gt;</code> element, as found by traversing <code>&lt;header&gt;</code>, <code>&lt;hgroup&gt;</code>, and <code>&lt;h1&gt;</code> nodes, is used as the <code>&lt;title&gt;</code> node in the Atom feed.  By default, the author of the entire feed will be listed as the author of each article; this may be overridden using the <code>author</code> keyword argument to <code>Spoon.publish</code>.  The content of the <code>&lt;article&gt;</code> will become the <code>&lt;content&gt;</code> node in the Atom feed.</p>
+
+<h2>OPTIONS</h2>
+
+<p>Options to <code>Spoon</code>'s constructor:</p>
+
+<dl>
+<dt><code>document_root</code></dt>
+<dd>This should agree with your Web server's document root as it is used to construct URLs from absolute paths.</dd>
+<dt><code>server_name</code></dt>
+<dd>By default, <code>socket.getfqdn</code> will be used to determine the server's name but this is frequently wrong in shared environments and is always wrong if you publish and then push to production.</dd>
+<dt class="flush"><code>title</code></dt>
+<dd>The site's title as the Atom feed should report it.</dd>
+<dt class="flush"><code>author</code></dt>
+<dd>The site's author as the Atom feed should report it.  This will be used by default for all published articles.</dd>
+<dt class="flush"><code>url</code></dt>
+<dd>URL the Atom feed should use for itself.  This will not change the path where the Atom feed is stored.  This is mostly for mod_rewrite users.</dd>
+</dl>
+
+
+<p>Options to <code>Spoon.publish</code>:</p>
+
+<dl>
+<dt><code>pathname</code></dt>
+<dd>Absolute path to the article to be published.  It must be within <code>document_root</code>.</dd>
+</dl>
+
+
+<h2>DEPENDENCIES</h2>
+
+<ul>
+<li>Python 2.6 <a href="http://python.org/">http://python.org/</a>
+</li>
+</ul>
+
+
+<h2>AUTHOR</h2>
+
+<p>Richard Crowley <a href="mailto:r@rcrowley.org">r@rcrowley.org</a></p>
+
+<h2>SEE ALSO</h2>
+
+<ul>
+<li><a href="http://github.com/rcrowley/spoon">http://github.com/rcrowley/spoon</a></li>
+<li><a href="http://github.com/rcrowley/rcrowley/blob/master/bin/publish">http://github.com/rcrowley/rcrowley/blob/master/bin/publish</a></li>
+<li><a href="http://github.com/mojombo/jekyll">http://github.com/mojombo/jekyll</a></li>
+</ul>
+
+
+<h2>LICENSE</h2>
+
+<p><a href="http://www.freebsd.org/copyright/freebsd-license.html">http://www.freebsd.org/copyright/freebsd-license.html</a></p>
+
+<ol class='foot man'>
+  <li class='tl'></li>
+  <li class='tc'>March 2010</li>
+  <li class='tr'>spoon(7)</li>
+</ol>
+
+</div>
+</body>
+</html>
