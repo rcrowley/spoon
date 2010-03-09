@@ -11,3 +11,8 @@ pip-log.txt
 test.html
 *.pyc
 *.swp
+
+configure
+config.*
+autom4te.cache
+Makefile
