@@ -41,10 +41,6 @@ Richard Crowley <r@rcrowley.org>
 
 ## SEE ALSO
 
-* <http://github.com/rcrowley/spoon>
-* <http://github.com/rcrowley/rcrowley/blob/master/bin/publish>
-* <http://github.com/mojombo/jekyll>
+Spoon's source code is available at <http://github.com/rcrowley/spoon>.  An executable for publishing can be found at <http://github.com/rcrowley/rcrowley/blob/master/bin/publish>.
 
-## LICENSE
-
-<http://www.freebsd.org/copyright/freebsd-license.html>
+If you don't like Spoon, perhaps you'll like <http://github.com/mojombo/jekyll>.
